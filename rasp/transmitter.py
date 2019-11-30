@@ -46,7 +46,7 @@ class SystemInfo():
 	
 	def fetch_cpu_info(self, delta_time = 0.1):
 		d = {}
-		d["temperature ('C)"] = self.fetch_cpu_temperature()
+		d["temp ('C)"] = self.fetch_cpu_temperature()
 		d["clock (Hz)"] = self.fetch_cpu_clock()
 		res, rate = self.calc_cpu_use_rate()
 		if not res:
@@ -60,7 +60,8 @@ class SystemInfo():
 		values = [f for f in res.decode().rstrip().split(" ") if not f == ""]
 		values[0] = values[0].replace(":", "")
 		d = {}
-		keys = ["name", "total (MB)", "used (MB)", "free (MB)", "shared (MB)", "buff/cache (MB)", "available (MB)"]
+		#keys = ["name", "total (MB)", "used (MB)", "free (MB)", "shared (MB)", "buff_cache (MB)", "available (MB)"]
+		keys = ["name", "total (MB)", "used (MB)", "free (MB)"]
 		for key, val in zip(keys, values):
 			d[key] = val
 		return d
@@ -117,17 +118,27 @@ def transmit_serial_data():
 		with serial.Serial("/dev/ttyUSB0", 115200) as com:
 			try:
 				com.reset_input_buffer()
-				com.write(bytes(data, "utf-8"))
+				tx_data = bytes(data + '\n', "utf-8")
+				#tx_data = bytes("hello" + '\n', "utf-8")
+				#print(tx_data, len(tx_data))
+				com.write(tx_data)
+				print("transmit complete: {0}".format(datetime.datetime.now()))
 			except:
 				print("something error occur")
 	except:
 		print("comport open error")
-		return
+	
+	# 明示的に削除
+	del si
 
 def main():
-	transmit_serial_data()
-	#com = serial.Serial("/dev/ttyUSB0", 115200)
-	#com.reset_input_buffer()
+	#transmit_serial_data()
+	
+	schedule.every(1).minutes.do(transmit_serial_data)
+	while True:
+		# 実行される時点で条件を満たすjobがあれば実行する
+		schedule.run_pending()
+		time.sleep(5)
 
 
 if __name__ == "__main__":
