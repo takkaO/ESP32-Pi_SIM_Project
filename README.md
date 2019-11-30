@@ -1,6 +1,19 @@
 # ESP32-RaspberryPi SIM connection project
 
 ## Installation
+Install ```PlatformIO```.
+```
+python3 -m pip install platformio
+```
+
+Expose PATH.
+```
+echo 'export PATH=${PATH}:/home/pi/.local/bin' >> ~/.bashrc
+# Check
+which platformio
+```
+
+(If need) Install library.
 ```
 platformio lib install 64
 platformio lib install 89
@@ -20,6 +33,8 @@ Redefine was not work!
 ```
 
 ## Reference
+- [CUI で Raspberry Pi から Arduino のスケッチを書き込む（platformio）](https://qiita.com/ancolin/items/d4291b994c422a01b6b3)
+- [Raspberry Pi の OS に関する情報やハードウェアの情報を得る](https://www.bnote.net/raspberry_pi/info_cmd.html)
 - [Raspberry Pi CPU周波数、CPU温度、CPU使用率の取得Pythonスクリプト](http://my-web-site.iobb.net/~yuki/2017-10/raspberry-pi/cpustat/)
 - [ラズパイの電源不足を調べてみました。](https://raspberrypi.mongonta.com/underpower/)
 - [RaspberryPi Documentation](https://github.com/raspberrypi/documentation/blob/JamesH65-patch-vcgencmd-vcdbg-docs/raspbian/applications/vcgencmd.md)
