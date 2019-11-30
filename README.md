@@ -18,3 +18,9 @@ Redefine was not work!
 ```
 #define MQTT_MAX_PACKET_SIZE 2048
 ```
+
+## Reference
+- [Raspberry Pi CPU周波数、CPU温度、CPU使用率の取得Pythonスクリプト](http://my-web-site.iobb.net/~yuki/2017-10/raspberry-pi/cpustat/)
+- [ラズパイの電源不足を調べてみました。](https://raspberrypi.mongonta.com/underpower/)
+- [RaspberryPi Documentation](https://github.com/raspberrypi/documentation/blob/JamesH65-patch-vcgencmd-vcdbg-docs/raspbian/applications/vcgencmd.md)
+- [Python3でpyserialを使う](https://qiita.com/gazami/items/d1d5801beeb4d42393bb)
