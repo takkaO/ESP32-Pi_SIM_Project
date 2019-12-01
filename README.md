@@ -39,3 +39,5 @@ Redefine was not work!
 - [ラズパイの電源不足を調べてみました。](https://raspberrypi.mongonta.com/underpower/)
 - [RaspberryPi Documentation](https://github.com/raspberrypi/documentation/blob/JamesH65-patch-vcgencmd-vcdbg-docs/raspbian/applications/vcgencmd.md)
 - [Python3でpyserialを使う](https://qiita.com/gazami/items/d1d5801beeb4d42393bb)
+- [pythonでMQTT送受信](https://qiita.com/hsgucci/items/6461d8555ea1245ef6c2)
+- [PythonからSQLite3で初めてのデータベース！](https://qiita.com/DNA1980/items/1fbcb95e8ee5771d6b2b)
