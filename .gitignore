@@ -1,1 +1,3 @@
 rasp/test.json
+db/*.ini
+db/*.sqlite3
