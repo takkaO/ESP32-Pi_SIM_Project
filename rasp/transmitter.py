@@ -134,7 +134,7 @@ def transmit_serial_data():
 def main():
 	#transmit_serial_data()
 	
-	schedule.every(1).minutes.do(transmit_serial_data)
+	schedule.every(10).minutes.do(transmit_serial_data)
 	while True:
 		# 実行される時点で条件を満たすjobがあれば実行する
 		schedule.run_pending()
