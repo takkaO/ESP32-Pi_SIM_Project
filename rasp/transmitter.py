@@ -133,8 +133,12 @@ def transmit_serial_data():
 
 def main():
 	#transmit_serial_data()
-	
-	schedule.every(10).minutes.do(transmit_serial_data)
+	print("Waiting start time...")
+	while not int(datetime.datetime.now().minute) % 5 == 0:
+		time.sleep(1)
+	print("OK!", datetime.datetime.now())
+
+	schedule.every(5).minutes.do(transmit_serial_data)
 	while True:
 		# 実行される時点で条件を満たすjobがあれば実行する
 		schedule.run_pending()

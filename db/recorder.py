@@ -2,6 +2,7 @@ import json
 import paho.mqtt.client as mqtt
 import sqlite3
 import os
+import datetime
 import configparser
 
 DB_PATH = "./rasp.sqlite3"
@@ -13,7 +14,7 @@ def on_connect(client, userdata, flag, rc):
 
 
 def on_message(client, userdata, msg):
-	print("Received message!")
+	print("Received message! -> {0}".format(datetime.datetime.now()))
 	try:
 		data = json.loads(msg.payload.decode("utf-8"))
 		data_time = "{0}-{1}-{2} {3}:{4}:{5}".format(
@@ -47,7 +48,7 @@ def on_message(client, userdata, msg):
 
 		conn.commit()
 		conn.close()
-		print("Insert complete!")
+		print("Insert complete!  -> {0}".format(datetime.datetime.now()))
 	except:
 		import traceback
 		traceback.print_exc()
@@ -107,8 +108,10 @@ def main():
 
 	client.connect(ip, port, keepalive=60)
 
-	client.loop_forever()
-
+	try:
+		client.loop_forever()
+	except KeyboardInterrupt:
+		pass
 
 if __name__ == "__main__":
 	main()
