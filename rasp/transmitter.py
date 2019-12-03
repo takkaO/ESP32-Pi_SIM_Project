@@ -1,6 +1,5 @@
 import serial
 import json
-import schedule
 import time
 import datetime
 import subprocess
@@ -122,7 +121,7 @@ def transmit_serial_data():
 				#tx_data = bytes("hello" + '\n', "utf-8")
 				#print(tx_data, len(tx_data))
 				com.write(tx_data)
-				print("transmit complete: {0}".format(datetime.datetime.now()))
+				print("transmit complete!: {0}".format(datetime.datetime.now()))
 			except:
 				print("something error occur")
 	except:
@@ -132,20 +131,27 @@ def transmit_serial_data():
 	del si
 
 def main():
-	interval_minutes = 5
 	#transmit_serial_data()
+
+	interval_minutes = 5
+	delta_sec = interval_minutes * 60
+	prev_time = None
 	print("Waiting start time...")
 	while not int(datetime.datetime.now().minute) % 5 == 0:
 		time.sleep(1)
-	print("OK!", datetime.datetime.now())
+	prev_time = datetime.datetime.now()
+	print("OK!", prev_time)
 	transmit_serial_data()
 
-	schedule.every(interval_minutes).minutes.do(transmit_serial_data)
+
 	print("Data will transmit each {0} minutes.".format(interval_minutes))
 	while True:
-		# 実行される時点で条件を満たすjobがあれば実行する
-		schedule.run_pending()
-		time.sleep(5)
+		delta = datetime.datetime.now() - prev_time
+		if delta.seconds >= delta_sec:
+			prev_time = datetime.datetime.now()
+			transmit_serial_data()
+			#print("debug -> ", datetime.datetime.now())
+		time.sleep(1)
 
 
 if __name__ == "__main__":
