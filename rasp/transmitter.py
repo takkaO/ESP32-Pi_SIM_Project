@@ -139,7 +139,8 @@ def main():
 	print("Waiting start time...")
 	while not int(datetime.datetime.now().minute) % 5 == 0:
 		time.sleep(1)
-	prev_time = datetime.datetime.now()
+	dt = datetime.datetime.now()
+	prev_time = datetime.datetime(dt.year, dt.month, dt.day, dt.hour, dt.minute, 0)
 	print("OK!", prev_time)
 	transmit_serial_data()
 
@@ -148,8 +149,9 @@ def main():
 	while True:
 		delta = datetime.datetime.now() - prev_time
 		if delta.seconds >= delta_sec:
-			prev_time = datetime.datetime.now()
 			transmit_serial_data()
+			dt = datetime.datetime.now()
+			prev_time = datetime.datetime(dt.year, dt.month, dt.day, dt.hour, dt.minute, 0)
 			#print("debug -> ", datetime.datetime.now())
 		time.sleep(1)
 
