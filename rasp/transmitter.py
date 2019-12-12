@@ -102,7 +102,7 @@ class SystemInfo():
 		return d
 
 
-def transmit_serial_data():
+def transmit_serial_data(com_port):
 	si = SystemInfo()
 	d = {}
 	d["cpu"] = si.fetch_cpu_info()
@@ -114,18 +114,11 @@ def transmit_serial_data():
 	data = json.dumps(d)
 	
 	try:
-		with serial.Serial("/dev/ttyUSB0", 115200) as com:
-			try:
-				com.reset_input_buffer()
-				tx_data = bytes(data + '\n', "utf-8")
-				#tx_data = bytes("hello" + '\n', "utf-8")
-				#print(tx_data, len(tx_data))
-				com.write(tx_data)
-				print("transmit complete!: {0}".format(datetime.datetime.now()))
-			except:
-				print("something error occur")
+		tx_data = bytes(data + '\n', "utf-8")
+		com_port.write(tx_data)
+		print("transmit complete!: {0}".format(datetime.datetime.now()))
 	except:
-		print("comport open error")
+		print("something error")
 	
 	# 明示的に削除
 	del si
@@ -136,24 +129,38 @@ def main():
 	interval_minutes = 5
 	delta_sec = interval_minutes * 60
 	prev_time = None
+	com_port = serial.Serial("/dev/ttyUSB0", 115200)
+	com_port.reset_input_buffer()
+	com_port.reset_output_buffer()
+	print("Open com port")
+	print(com_port)
+	
 	print("Waiting start time...")
 	while not int(datetime.datetime.now().minute) % 5 == 0:
 		time.sleep(1)
 	dt = datetime.datetime.now()
 	prev_time = datetime.datetime(dt.year, dt.month, dt.day, dt.hour, dt.minute, 0)
 	print("OK!", prev_time)
-	transmit_serial_data()
+	transmit_serial_data(com_port)
 
 
 	print("Data will transmit each {0} minutes.".format(interval_minutes))
-	while True:
-		delta = datetime.datetime.now() - prev_time
-		if delta.seconds >= delta_sec:
-			transmit_serial_data()
-			dt = datetime.datetime.now()
-			prev_time = datetime.datetime(dt.year, dt.month, dt.day, dt.hour, dt.minute, 0)
-			#print("debug -> ", datetime.datetime.now())
-		time.sleep(1)
+	try:
+		while True:
+			delta = datetime.datetime.now() - prev_time
+			if delta.seconds >= delta_sec:
+				transmit_serial_data(com_port)
+				dt = datetime.datetime.now()
+				prev_time = datetime.datetime(dt.year, dt.month, dt.day, dt.hour, dt.minute, 0)
+				#print("debug -> ", datetime.datetime.now())
+
+			if not com_port.inWaiting() == 0:
+				# for debug
+				res = com_port.read(com_port.inWaiting())
+				print(res.decode("utf-8"))
+			time.sleep(1)
+	except:
+		com_port.close()
 
 
 if __name__ == "__main__":
