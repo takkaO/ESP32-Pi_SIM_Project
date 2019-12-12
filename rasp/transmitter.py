@@ -137,6 +137,10 @@ def main():
 	
 	print("Waiting start time...")
 	while not int(datetime.datetime.now().minute) % 5 == 0:
+		if not com_port.inWaiting() == 0:
+			# for debug
+			res = com_port.read(com_port.inWaiting())
+			print(res.decode("utf-8"))
 		time.sleep(1)
 	dt = datetime.datetime.now()
 	prev_time = datetime.datetime(dt.year, dt.month, dt.day, dt.hour, dt.minute, 0)
