@@ -1,7 +1,7 @@
 # ESP32-RaspberryPi SIM connection project
 
 ## Installation
-Install ```PlatformIO```.
+Install ```PlatformIO``` for writing program into ESP32.
 ```
 python3 -m pip install platformio
 ```
