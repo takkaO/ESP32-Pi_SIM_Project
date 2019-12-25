@@ -140,7 +140,10 @@ def main():
 		if not com_port.inWaiting() == 0:
 			# for debug
 			res = com_port.read(com_port.inWaiting())
-			print("#> " + res.decode("utf-8"), end="")
+			try:
+				print("#> " + res.decode("utf-8").replace("\n", "\n#> "))
+			except:
+				print("RAW#> " + str(res))
 		time.sleep(1)
 	dt = datetime.datetime.now()
 	prev_time = datetime.datetime(dt.year, dt.month, dt.day, dt.hour, dt.minute, 0)
@@ -161,7 +164,10 @@ def main():
 			if not com_port.inWaiting() == 0:
 				# for debug
 				res = com_port.read(com_port.inWaiting())
-				print("#> " + res.decode("utf-8"), end="")
+				try:
+					print("#> " + res.decode("utf-8").replace("\n", "\n#> "))
+				except:
+					print("RAW#> " + str(res))
 			time.sleep(1)
 	except:
 		com_port.close()

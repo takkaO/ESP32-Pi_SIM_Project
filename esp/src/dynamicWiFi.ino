@@ -42,7 +42,7 @@ void clientSetup(){
         delay(500);
         Serial.print(".");
     }
-    Serial.print(" CONNECTED!");
+    Serial.println(" CONNECTED!");
 }
 
 void handle_OnRootGet(){

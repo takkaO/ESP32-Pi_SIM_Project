@@ -33,7 +33,8 @@ void setup() {
     // Initialize file system
     if (!SPIFFS.begin(true)){
         Serial.println("An Error has occurred while mounting SPIFFS");
-        while(1);
+		delay(1000);
+		ESP.restart();
     }
 
     pinMode(MODE_SWITCH, INPUT);
@@ -57,6 +58,7 @@ void setup() {
     }
 }
 
+int mqtt_error_counter = 0;
 void loop() {
     if (op_mode == SERVER) {
         /* If server mode */
@@ -74,7 +76,7 @@ void loop() {
 	digitalWrite(LED_WIFI, HIGH);
 
 	String s;
-	char c[2048];
+	char c[2048] = {0};
 	StaticJsonDocument <2048> doc;
 
 	if (Serial.available()) {
@@ -94,12 +96,20 @@ void loop() {
 	}
 
 	if(checkMqttConnection()){
-		client.loop();
+		mqtt_error_counter = 0;
 		digitalWrite(LED5, HIGH);
 	}
 	else{
+		mqtt_error_counter += 1;
+		if (mqtt_error_counter == 5) {
+			// Faild to connect broker 5 times,
+			// Reset ESP32
+			Serial.println("\nRestart ESP32");
+			ESP.restart();
+		}
 		digitalWrite(LED5, LOW);
 	}
+	client.loop();
 }
 
 
@@ -115,7 +125,7 @@ void brokerSetup(){
 	Serial.println("HOST: " + host);
     Serial.println("PORT: " + port);
 
-	char host_c[64];
+	char host_c[128] = {0};
 	host.toCharArray(host_c, host.length() + 1);
 	client.setServer(host_c, port.toInt());
 }
