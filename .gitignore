@@ -1,3 +1,5 @@
 rasp/test.json
 db/*.ini
 db/*.sqlite3
+__pycache__
+BrokerSetting.ini
