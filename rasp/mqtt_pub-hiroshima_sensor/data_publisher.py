@@ -1,6 +1,8 @@
 import serial
 from serial.tools import list_ports
 import re
+import json
+import time
 from myMqtt import MyMqtt, CallbackType
 
 
@@ -33,19 +35,17 @@ def main(port_name):
 	print("Ready!")
 
 	while True:
-		data = com.readline().decode('utf-8')
-		ret = splitData(data)
-		if ret[1] == "Temp" or ret[1] == "Time" or ret[1] == "":
-			continue
-		if ret[1] in {"CO2", "Pres"}:
-			base_topic = "sensor1/data1/"
-			print(base_topic + ret[1], ret[2], end="")
-			mymqtt.publish(base_topic + ret[1], ret[2])
-		elif ret[1] in {"Humi", "Light"}:
-			base_topic = "sensor1/data2/"
-			print(base_topic + ret[1], ret[2], end="")
-			mymqtt.publish(base_topic + ret[1], ret[2])
-
+		d = {}
+		time.sleep(1)
+		while not com.inWaiting() == 0:
+			data = com.readline().decode('utf-8')
+			ret = splitData(data)
+			if ret[1] == "Time" or ret[1] == "":
+				continue
+			d[ret[1]] = ret[2]
+		if not d == {}:
+			data = json.dumps(d)
+			mymqtt.publish("sensor", data)
 
 if __name__ == "__main__":
 	ports = []
