@@ -46,6 +46,7 @@ def main(port_name):
 	while True:
 		d = {}
 		delta = datetime.datetime.now() - prev_time
+		com.reset_input_buffer()
 		if delta.seconds >= delta_sec:
 			while com.in_waiting == 0:
 				pass
